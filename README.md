@@ -7,7 +7,7 @@ Press "q" inside the skill window to quit <br>
 Hold "p" to pause mouse movements
 
 ### Project Structure
-3 files (main.py, setup.py, functions.py)
+3 files (main.py, setup.py, functions.py) <br>
 1 folder (images) including all pictures needed to run the code 
 
 ## Setup
