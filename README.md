@@ -33,12 +33,12 @@ You can use your own teams but you have to code them yourself. <br>
 E.g. if you want to use red Tarmiel instead of Skadi (I don't have red Tarmiel) you have to add his cards to setup_cards(boss_name) in setup.py (dirty way would be to take screenshots of his cards and name them skadi) <br>
 If you want to do a completely different clear technique, you will have to adjust the phase functions in functions.py and the call of them in main.py (thats a lot of work)
 
-#### Bird Team:
+#### Bird Team (19/20 runs are successful):
 ![](/readme_images/bird_team.PNG)
 #### Bird Artifact:
 ![](/readme_images/bird_artifact.PNG)
 
-#### Deer Team:
+#### Deer Team (20/20 runs are successful):
 ![](/readme_images/deer_team.PNG)
 #### Deer Artifact:
 ![](/readme_images/deer_artifact.PNG)
