@@ -6,6 +6,9 @@ It works by capturing your main screen every few second, analyzing it and execut
 Press "q" inside the skill window to quit <br>
 Hold "p" to pause mouse movements
 
+### Project Structure
+3 files (main.py, setup.py, functions.py)
+1 folder (images) including all pictures needed to run the code 
 
 ## Setup
 The program was written on Windows 10 with PyCharm Community Edition (2022.1) in Python. <br>
