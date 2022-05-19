@@ -3,6 +3,7 @@ import pyautogui as pg
 import time
 import setup
 import keyboard
+import numpy as np
 
 
 def img_detection(frame, img):
@@ -13,6 +14,23 @@ def img_detection(frame, img):
         return True
     else:
         return False
+
+
+def img_detection_rectangle(frame, img):
+    threshold = .80
+    height, width, dump = img.shape
+    result = cv2.matchTemplate(frame, img, cv2.TM_CCOEFF_NORMED)
+    # minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(result)
+    yLoc, xLoc = np.where(result >= threshold)
+
+    ## group rectangles
+    rectangles = []
+    for (x, y) in zip(xLoc, yLoc):
+        rectangles.append([int(x), int(y), int(width), int(height)])
+        rectangles.append([int(x), int(y), int(width), int(height)])
+
+    rectangles, weights = cv2.groupRectangles(rectangles, 1, 0.2)
+    return rectangles
 
 
 def phase_detection(p_frame, p_img):
@@ -142,14 +160,16 @@ def phase123_bird(p):
             elif p.level == 3:
                 setup.skillQueue.put((51, p, "use"))
         case "brun2":
-            if p.count > 1 and p.level == 1:
-                setup.skillQueue.put((16, p, "move"))
-            elif p.level == 1:
-                setup.skillQueue.put((80, p, "use"))
-            elif p.level == 2:
-                setup.skillQueue.put((100, p, "use"))
-            elif p.level == 3:
-                setup.skillQueue.put((120, p, "use"))
+            pass
+            # if p.count > 1 and p.level == 1:
+            #     setup.skillQueue.put((16, p, "move"))
+            # elif p.count >= 3:                                # see main.py
+            #     if p.level == 1:
+            #         setup.skillQueue.put((80, p, "use"))
+            #     elif p.level == 2:
+            #         setup.skillQueue.put((100, p, "use"))
+            #     elif p.level == 3:
+            #         setup.skillQueue.put((120, p, "use"))
         case "brun_ult":
             setup.skillQueue.put((28, p, "use"))
         # case "mag1":
@@ -197,16 +217,14 @@ def phase123_bird(p):
         case "gow_ult":
             setup.skillQueue.put((19, p, "use"))
         case "mel1":
-            if p.count == 1 or p.level >= 2:
-                pass
-            elif p.count > 1 and p.level == 1:
+            if p.count >= 2 and p.level == 1:
                 setup.skillQueue.put((17, p, "move"))
-            if p.level == 1:
-                setup.skillQueue.put((70, p, "use"))
-            elif p.level == 2:
-                setup.skillQueue.put((90, p, "use"))
-            elif p.level == 3:
-                setup.skillQueue.put((110, p, "use"))
+            # elif p.level == 1:
+            #     setup.skillQueue.put((70, p, "use"))
+            # elif p.count >= 2 and p.level == 2:
+            #     setup.skillQueue.put((80, p, "use"))
+            # elif p.count >= 3 and p.level == 3:
+            #     setup.skillQueue.put((100, p, "use"))
         case "mel2":
             if p.level == 1:
                 setup.skillQueue.put((30, p, "use"))

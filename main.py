@@ -9,7 +9,7 @@ from setup import *
 import setup
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-boss_name = "deer"
+boss_name = "bird"  # bird, deer
 # char_names = ["brun", "mat", "jor", "mel"]  # brun, mag, mat, gow, mel, jor, skadi, one
 if boss_name == "bird":
     char_names = ["brun", "mel", "mat", "gow"]
@@ -105,6 +105,62 @@ while True:
                             setup.skillQueue.put((4, p, "use"))
                             break
 
+    if "brun" in char_names:
+        brun2_lvl1_counter = 0
+        brun2_lvl2_counter = 0
+        brun2_lvl3_counter = 0
+        if READY and phase != 4:
+            for p in Skills:
+                if p.name == "brun2" and p.count > 0:
+                    if p.level == 1:
+                        brun2_lvl1_counter = p.count
+                    elif p.level == 2:
+                        brun2_lvl2_counter = p.count
+                    elif p.level == 3:
+                        brun2_lvl3_counter = p.count
+
+            brun2_counter = brun2_lvl1_counter + brun2_lvl2_counter + brun2_lvl3_counter
+            if brun2_counter >= 4:
+                for p in Skills:
+                    if p.name == "brun2" and p.count > 0:
+                        if p.level == 1:
+                            setup.skillQueue.put((90, p, "use"))
+                            break
+                        elif p.level == 2:
+                            setup.skillQueue.put((110, p, "use"))
+                            break
+                        elif p.level == 3:
+                            setup.skillQueue.put((120, p, "use"))
+                            break
+
+    if "mel" in char_names and boss_name == "bird":
+        mel2_lvl1_counter = 0
+        mel2_lvl2_counter = 0
+        mel2_lvl3_counter = 0
+        if READY and phase != 4:
+            for p in Skills:
+                if p.name == "mel2" and p.count > 0:
+                    if p.level == 1:
+                        mel2_lvl1_counter = p.count
+                    elif p.level == 2:
+                        mel2_lvl2_counter = p.count
+                    elif p.level == 3:
+                        mel2_lvl3_counter = p.count
+
+            mel2_counter = mel2_lvl1_counter + mel2_lvl2_counter + mel2_lvl3_counter
+            if mel2_counter >= 3:
+                for p in Skills:
+                    if p.name == "mel2" and p.count > 0:
+                        if p.level == 1:
+                            setup.skillQueue.put((70, p, "use"))
+                            break
+                        elif p.level == 2:
+                            setup.skillQueue.put((80, p, "use"))
+                            break
+                        elif p.level == 3:
+                            setup.skillQueue.put((100, p, "use"))
+                            break
+
     ## mag buff activation
     if "mag" in char_names:
         mag2_counter = 0
@@ -162,6 +218,9 @@ while True:
 
 
 ### process queue
+    if setup.skillQueue.qsize() == 0 and READY:
+        use_card(setup.ready_frame_top, setup.ready_frame_left, img_detection_rectangle(ready_frame, setup.ready_img))  # skip turn
+
     if setup.skillQueue.qsize() >= 1 and not keyboard.is_pressed("p"):# and keyboard.is_pressed("o"):
         queue_priority, skill_object, skill_option = setup.skillQueue.get()
         print(str(queue_priority) + " " + str(skill_object.name) + " " + str(skill_option))
@@ -171,7 +230,10 @@ while True:
         elif skill_option == "move":
             move_card(setup.skill_frame_top, setup.skill_frame_left, skill_object.rectangles)
 
-        time.sleep(1.5)
+        if boss_name == "bird":
+            time.sleep(0.5)
+        else:
+            time.sleep(1.5)
 
         ## bird special counters
         if boss_name == "bird":
