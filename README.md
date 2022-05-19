@@ -16,7 +16,7 @@ Hold "p" to pause mouse movements
 
 ## Setup
 The program was created on Windows 10 with PyCharm Community Edition (2022.1) in Python. <br>
-My main screen is 1920x1080 and I am running the 7dsgc desktop app on fullscreen.
+My main screen is 1920x1080 and I am running the 7dsgc desktop app on fullscreen. <br>
 
 It may be possible that you are able to instantly run the code by executing main.py. <br>
 If not follow these steps:
@@ -24,7 +24,7 @@ If not follow these steps:
 2. Open 7dsgc_AutoClear-main with PyCharm (Pay attention to the folder structure)
 3. Add the needed libraries to your project ("File->Settings...->Project: [Name]->Python Interpreter->+" (opencv-python, numpy, mss, pyautogui, time, keyboard)
 4. Execute the program by right clicking main.py in the left window and press "Run 'main'"
-5. The program will start doing something as soon as it sees the demonic beast battle stages.
+5. The program will start doing something as soon as it sees the demonic beast battle stages. (Run PyCharm as administrator if mouse clicks are not working)
 <br><br>
 
 
