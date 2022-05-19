@@ -148,7 +148,7 @@ while True:
                         mel2_lvl3_counter = p.count
 
             mel2_counter = mel2_lvl1_counter + mel2_lvl2_counter + mel2_lvl3_counter
-            if mel2_counter >= 3:
+            if mel2_counter >= 2:
                 for p in Skills:
                     if p.name == "mel2" and p.count > 0:
                         if p.level == 1:
