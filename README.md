@@ -15,7 +15,7 @@ Hold "p" to pause mouse movements
 
 
 ## Setup
-The program was written on Windows 10 with PyCharm Community Edition (2022.1) in Python. <br>
+The program was created on Windows 10 with PyCharm Community Edition (2022.1) in Python. <br>
 My main screen is 1920x1080 and I am running the 7dsgc desktop app on fullscreen.
 
 It may be possible that you are able to instantly run the code by executing main.py. <br>
