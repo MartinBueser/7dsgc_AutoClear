@@ -141,11 +141,11 @@ while True:
             for p in Skills:
                 if p.name == "mel1" and p.count > 0:
                     if p.level == 1:
-                        mel1_lvl1_counter = p.count
+                        mel2_lvl1_counter = p.count
                     elif p.level == 2:
-                        mel1_lvl2_counter = p.count
+                        mel2_lvl2_counter = p.count
                     elif p.level == 3:
-                        mel1_lvl3_counter = p.count
+                        mel2_lvl3_counter = p.count
 
             mel1_counter = mel1_lvl1_counter + mel1_lvl2_counter + mel1_lvl3_counter
             if mel1_counter >= 2:
@@ -218,10 +218,11 @@ while True:
 
 
 ### process queue
-    if setup.skillQueue.qsize() == 0 and READY:
+    print(READY)
+    if setup.skillQueue.qsize() == 0 and READY and keyboard.is_pressed("o"):
         use_card(setup.ready_frame_top, setup.ready_frame_left, img_detection_rectangle(ready_frame, setup.ready_img))  # skip turn
 
-    if setup.skillQueue.qsize() >= 1 and not keyboard.is_pressed("p"):# and keyboard.is_pressed("o"):
+    if setup.skillQueue.qsize() >= 1 and not keyboard.is_pressed("p") and keyboard.is_pressed("o"):
         queue_priority, skill_object, skill_option = setup.skillQueue.get()
         print(str(queue_priority) + " " + str(skill_object.name) + " " + str(skill_option))
 

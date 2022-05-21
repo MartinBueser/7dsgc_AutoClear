@@ -739,7 +739,7 @@ def setup_cards(char_names):
         elif p.name == "skadi_ult":
             p.threshold = 0.9
         elif p.name == "one1":
-            p.threshold = 0.91
+            p.threshold = 0.9
         elif p.name == "one2":
             p.threshold = 0.9
         elif p.name == "one_ult":
