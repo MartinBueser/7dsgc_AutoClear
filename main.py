@@ -218,7 +218,6 @@ while True:
 
 
 ### process queue
-    print(READY)
     if setup.skillQueue.qsize() == 0 and READY and keyboard.is_pressed("o"):
         use_card(setup.ready_frame_top, setup.ready_frame_left, img_detection_rectangle(ready_frame, setup.ready_img))  # skip turn
 
