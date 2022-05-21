@@ -218,10 +218,10 @@ while True:
 
 
 ### process queue
-    if setup.skillQueue.qsize() == 0 and READY and keyboard.is_pressed("o"):
+    if setup.skillQueue.qsize() == 0 and READY:# and keyboard.is_pressed("o"):
         use_card(setup.ready_frame_top, setup.ready_frame_left, img_detection_rectangle(ready_frame, setup.ready_img))  # skip turn
 
-    if setup.skillQueue.qsize() >= 1 and not keyboard.is_pressed("p") and keyboard.is_pressed("o"):
+    if setup.skillQueue.qsize() >= 1 and not keyboard.is_pressed("p"):# and keyboard.is_pressed("o"):
         queue_priority, skill_object, skill_option = setup.skillQueue.get()
         print(str(queue_priority) + " " + str(skill_object.name) + " " + str(skill_option))
 
@@ -309,6 +309,7 @@ while True:
     # cv2.imshow("phase", phase_frame)
     # cv2.imshow("ready", ready_frame)
     cv2.imshow("skill", skill_frame)
+    cv2.setWindowProperty("skill", cv2.WND_PROP_TOPMOST, 1)
     # cv2.imshow("ok", ok_reset_frame)
     # cv2.imshow("select stage", select_stage_frame)
     # cv2.imshow("confirm reset", confirm_reset_frame)
