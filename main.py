@@ -141,11 +141,11 @@ while True:
             for p in Skills:
                 if p.name == "mel1" and p.count > 0:
                     if p.level == 1:
-                        mel2_lvl1_counter = p.count
+                        mel1_lvl1_counter = p.count
                     elif p.level == 2:
-                        mel2_lvl2_counter = p.count
+                        mel1_lvl2_counter = p.count
                     elif p.level == 3:
-                        mel2_lvl3_counter = p.count
+                        mel1_lvl3_counter = p.count
 
             mel1_counter = mel1_lvl1_counter + mel1_lvl2_counter + mel1_lvl3_counter
             if mel1_counter >= 2:
