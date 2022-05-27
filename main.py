@@ -9,7 +9,7 @@ from setup import *
 import setup
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-boss_name = "bird"  # bird, deer
+boss_name = "deer"  # bird, deer
 # char_names = ["brun", "mat", "jor", "mel"]  # brun, mag, mat, gow, mel, jor, skadi, one
 if boss_name == "bird":
     char_names = ["brun", "mel", "mat", "gow"]

@@ -377,8 +377,13 @@ def phase2_deer(p):
         # case "jor_ult":
         #     setup.skillQueue.put((19 + setup.green_card_delay_phase2, p, "use"))
         case "mel1":
-            if p.count > 1:
-                setup.skillQueue.put((50, p, "move"))
+            if p.count >= 2:
+                if p.level == 1:
+                    setup.skillQueue.put((60, p, "move"))
+                elif p.level == 2:
+                    setup.skillQueue.put((61, p, "move"))
+                elif p.level == 3:
+                    setup.skillQueue.put((62, p, "move"))
             if p.level == 1:
                 setup.skillQueue.put((102, p, "use"))
             elif p.level == 2:
@@ -387,7 +392,7 @@ def phase2_deer(p):
                 setup.skillQueue.put((100, p, "use"))
         case "mel2":
             if p.count > 1:
-                setup.skillQueue.put((51, p, "move"))
+                setup.skillQueue.put((63, p, "move"))
         # case "mel_ult":
         #     setup.skillQueue.put((103, p, "use"))
         case "one1":
@@ -444,13 +449,18 @@ def phase3_deer(p):
                 setup.skillQueue.put((33, p, "use"))
         case "mel1":
             if p.count >= 2:
-                setup.skillQueue.put((50, p, "move"))
+                if p.level == 1:
+                    setup.skillQueue.put((50, p, "move"))
+                elif p.level == 2:
+                    setup.skillQueue.put((51, p, "move"))
+                elif p.level == 3:
+                    setup.skillQueue.put((52, p, "move"))
             if p.level == 1:
-                setup.skillQueue.put((51, p, "use"))
-            elif p.level == 2:
-                setup.skillQueue.put((52, p, "use"))
-            elif p.level == 3:
                 setup.skillQueue.put((53, p, "use"))
+            elif p.level == 2:
+                setup.skillQueue.put((54, p, "use"))
+            elif p.level == 3:
+                setup.skillQueue.put((55, p, "use"))
         case "mel2":
             if p.level == 1:
                 setup.skillQueue.put((16, p, "use"))
