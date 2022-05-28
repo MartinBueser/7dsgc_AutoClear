@@ -74,10 +74,12 @@ def move_card(skill_frame_top, skill_frame_left, rectangles):
                 time.sleep(0.5)
 
 
-def menu(boss_name, ok_reset_frame, confirm_reset_frame, select_stage_frame, save_team_frame, confirm_team_frame, use_stamina_potion_frame):
+def menu(BIRD_AUTO, DEER_AUTO, ok_reset_frame, confirm_reset_frame, select_stage_frame, save_team_frame, confirm_team_frame, use_stamina_potion_frame):
     OK = img_detection(ok_reset_frame, setup.ok_img)
-    STAGE_OPEN = img_detection(select_stage_frame, setup.stage_open_img)
-    STAGE_CLEARED = img_detection(select_stage_frame, setup.stage_cleared_img)
+    BIRD_STAGE_OPEN = img_detection(select_stage_frame, setup.stage_open_bird_img)
+    BIRD_STAGE_CLEARED = img_detection(select_stage_frame, setup.stage_cleared_bird_img)
+    DEER_STAGE_OPEN = img_detection(select_stage_frame, setup.stage_open_deer_img)
+    DEER_STAGE_CLEARED = img_detection(select_stage_frame, setup.stage_cleared_deer_img)
     RESET = img_detection(ok_reset_frame, setup.reset_img)
     CONFIRM_RESET = img_detection(confirm_reset_frame, setup.confirm_reset_img)
     SET_PARTY = img_detection(ok_reset_frame, setup.set_party_img)
@@ -92,17 +94,20 @@ def menu(boss_name, ok_reset_frame, confirm_reset_frame, select_stage_frame, sav
     if OK:
         print("ok")
         left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
-        if not setup.COMPLETION_COUNTER_SET:
-            setup.completion_counter = setup.completion_counter + 1
-            setup.COMPLETION_COUNTER_SET = True
+        if BIRD_AUTO and not setup.BIRD_COMPLETION_COUNTER_SET:
+            setup.bird_completion_counter = setup.bird_completion_counter + 1
+            setup.BIRD_COMPLETION_COUNTER_SET = True
+        elif DEER_AUTO and not setup.DEER_COMPLETION_COUNTER_SET:
+            setup.deer_completion_counter = setup.deer_completion_counter + 1
+            setup.DEER_COMPLETION_COUNTER_SET = True
     if CONFIRM_RESET:
         print("confirm reset")
         left_click_mouse(setup.confirm_reset_frame_top, setup.confirm_reset_frame_left, setup.confirm_reset_frame_width, setup.confirm_reset_frame_height)
-    elif STAGE_CLEARED and RESET:
+    elif (BIRD_STAGE_CLEARED or DEER_STAGE_CLEARED) and RESET:
         print("stage cleared")
         print("reset")
         left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
-    if STAGE_OPEN and SET_PARTY:
+    if (BIRD_STAGE_OPEN or DEER_STAGE_OPEN) and SET_PARTY:
         print("stage open")
         print("set party")
         left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
@@ -112,7 +117,7 @@ def menu(boss_name, ok_reset_frame, confirm_reset_frame, select_stage_frame, sav
     elif SAVE_TEAM:
         print("save team")
         left_click_mouse(setup.save_team_frame_top, setup.save_team_frame_left, setup.save_team_frame_width, setup.save_team_frame_height)
-    if STAGE_OPEN and RESET:
+    if (BIRD_STAGE_OPEN or DEER_STAGE_OPEN) and RESET:
         print("stage open")
         left_click_mouse(setup.select_stage_frame_top, setup.select_stage_frame_left, setup.select_stage_frame_width, setup.select_stage_frame_height)
     if USE_STAMINA_POTION:
@@ -124,11 +129,13 @@ def menu(boss_name, ok_reset_frame, confirm_reset_frame, select_stage_frame, sav
     elif START_STAGE:
         print("start stage")
         left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
-        setup.COMPLETION_COUNTER_SET = False
-        setup.FAILURE_COUNTER_SET = False
-        if boss_name == "bird":
+        setup.BIRD_COMPLETION_COUNTER_SET = False
+        setup.BIRD_FAILURE_COUNTER_SET = False
+        setup.DEER_COMPLETION_COUNTER_SET = False
+        setup.DEER_FAILURE_COUNTER_SET = False
+        if BIRD_AUTO:
             setup.mat2_delay_counter = 0
-        elif boss_name == "deer":
+        elif DEER_AUTO:
             setup.red_card_delay_phase2 = 0
             setup.green_card_delay_phase2 = 100
             setup.blue_card_delay_phase2 = 100
@@ -141,9 +148,12 @@ def menu(boss_name, ok_reset_frame, confirm_reset_frame, select_stage_frame, sav
     if FAILED_OK:
         print("failed ok")
         left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
-        if not setup.FAILURE_COUNTER_SET:
-            setup.failure_counter = setup.failure_counter + 1
-            setup.FAILURE_COUNTER_SET = True
+        if BIRD_AUTO and not setup.BIRD_FAILURE_COUNTER_SET:
+            setup.bird_failure_counter = setup.bird_failure_counter + 1
+            setup.BIRD_FAILURE_COUNTER_SET = True
+        elif DEER_AUTO and not setup.DEER_FAILURE_COUNTER_SET:
+            setup.deer_failure_counter = setup.deer_failure_counter + 1
+            setup.DEER_FAILURE_COUNTER_SET = True
 
     time.sleep(1)
     # print("Completions: " + str(setup.completion_counter))
