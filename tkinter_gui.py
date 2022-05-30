@@ -40,8 +40,9 @@ def GUI():
     tkinter_height = str(500)
 
     setup.root.title("Auto 7dsgc")
-    setup.root.geometry(tkinter_width+"x"+tkinter_height + "+1120+0")
+    setup.root.geometry(tkinter_width+"x"+tkinter_height + "+1111+0")
     setup.root.attributes("-topmost", True)
+    setup.root.attributes("-alpha", 0.5)
 
     setup.skill_label_frame = Label(setup.root, bg="black")
     setup.skill_label_frame.grid(row=0, column=1, rowspan=4, columnspan=14, padx=50, pady=50)

@@ -21,11 +21,9 @@ GUI()
 ## screenshot of display
 setup.sct = mss()
 
-skill_delay_time = time.time()
-menu_delay_time = time.time()
-p_delay_time = time.time()
+
 while setup.RUN_LOOP:
-    current_time = time.time()
+    setup.current_time = time.time()
 
     setup.skill_frame = cv2.cvtColor(np.array(setup.sct.grab(setup.skill_frame_box)), cv2.COLOR_BGRA2BGR)
 
@@ -80,40 +78,37 @@ while setup.RUN_LOOP:
 
         ## process queue
         if READY and setup.MOUSE_ACTIVE:
-            if setup.BIRD_AUTO and (current_time - skill_delay_time >= 0.5):  # delay card usage
+            if (setup.BIRD_AUTO or setup.DEER_AUTO) and (setup.current_time - setup.skill_delay_time >= 2.5):  # delay card usage
                 process_queue(READY, phase)
-                skill_delay_time = current_time
-            elif setup.DEER_AUTO and (current_time - skill_delay_time >= 1.5):
-                process_queue(READY, phase)
-                skill_delay_time = current_time
+                setup.skill_delay_time = setup.current_time
 
         while not setup.skillQueue.empty():  # empty queue
             flush = setup.skillQueue.get()
 
 
+        ## reset skill count
+        for p in Skills:
+            # print(p.name)
+            p.count = 0
+
+
         ## menu navigation
-        if setup.MOUSE_ACTIVE and (current_time - menu_delay_time >= 1):
+        if setup.MOUSE_ACTIVE and (setup.current_time - setup.menu_delay_time >= 1):
             menu()
-            menu_delay_time = current_time
+            setup.menu_delay_time = setup.current_time
 
 
     ### show different frames
-        # cv2.imshow("phase", setup.phase_frame)
-        # cv2.imshow("ready", setup.ready_frame)
-        #cv2.imshow("skill", setup.skill_frame)
-        #cv2.setWindowProperty("skill", cv2.WND_PROP_TOPMOST, 1)
-        # cv2.imshow("ok", setup.ok_reset_frame)
-        # cv2.imshow("select stage", setup.select_stage_frame)
-        # cv2.imshow("confirm reset", setup.confirm_reset_frame)
-        # cv2.imshow("save team", setup.save_team_frame)
-        # cv2.imshow("confirm team", setup.confirm_team_frame)
-        # cv2.imshow("use stamina portion", setup.use_stamina_potion_frame)
-
-
-        ## reset skill count
-        for p in Skills:
-            #print(p.name)
-            p.count = 0
+    # cv2.imshow("phase", setup.phase_frame)
+    # cv2.imshow("ready", setup.ready_frame)
+    #cv2.imshow("skill", setup.skill_frame)
+    #cv2.setWindowProperty("skill", cv2.WND_PROP_TOPMOST, 1)
+    # cv2.imshow("ok", setup.ok_reset_frame)
+    # cv2.imshow("select stage", setup.select_stage_frame)
+    # cv2.imshow("confirm reset", setup.confirm_reset_frame)
+    # cv2.imshow("save team", setup.save_team_frame)
+    # cv2.imshow("confirm team", setup.confirm_team_frame)
+    # cv2.imshow("use stamina portion", setup.use_stamina_potion_frame)
 
 
     ### GUI
@@ -121,9 +116,9 @@ while setup.RUN_LOOP:
 
 
     ### hotkeys
-    if keyboard.is_pressed("p") and (current_time - p_delay_time >= 0.5):
+    if keyboard.is_pressed("p") and (setup.current_time - setup.p_delay_time >= 0.5):
         start_stop_mouse()
-        p_delay_time = current_time
+        setup.p_delay_time = setup.current_time
     if keyboard.is_pressed("s"):
         stop_auto()
     if keyboard.is_pressed("q"):

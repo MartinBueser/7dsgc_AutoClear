@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import queue
+import time
 from tkinter import StringVar, Tk
 
 
@@ -35,6 +36,15 @@ class Skills(metaclass=IterRegistry):
 def init():
     global sct
     sct = None
+
+    global current_time
+    current_time = time.time()
+    global skill_delay_time
+    skill_delay_time = time.time()
+    global menu_delay_time
+    menu_delay_time = time.time()
+    global p_delay_time
+    p_delay_time = time.time()
 
     global skillQueue
     skillQueue = queue.PriorityQueue()
