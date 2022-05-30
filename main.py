@@ -1,7 +1,7 @@
 from setup import *
 import setup
 from functions import *
-from tkinter_gui import GUI, updateGUI
+from tkinter_gui import *
 
 import cv2
 import numpy as np
@@ -21,8 +21,12 @@ GUI()
 ## screenshot of display
 setup.sct = mss()
 
-
+skill_delay_time = time.time()
+menu_delay_time = time.time()
+p_delay_time = time.time()
 while setup.RUN_LOOP:
+    current_time = time.time()
+
     setup.skill_frame = cv2.cvtColor(np.array(setup.sct.grab(setup.skill_frame_box)), cv2.COLOR_BGRA2BGR)
 
     ### demonic beast battle
@@ -75,16 +79,22 @@ while setup.RUN_LOOP:
 
 
         ## process queue
-        if setup.MOUSE_ACTIVE:
-            process_queue(READY, phase)
+        if READY and setup.MOUSE_ACTIVE:
+            if setup.BIRD_AUTO and (current_time - skill_delay_time >= 0.5):  # delay card usage
+                process_queue(READY, phase)
+                skill_delay_time = current_time
+            elif setup.DEER_AUTO and (current_time - skill_delay_time >= 1.5):
+                process_queue(READY, phase)
+                skill_delay_time = current_time
 
         while not setup.skillQueue.empty():  # empty queue
             flush = setup.skillQueue.get()
 
 
         ## menu navigation
-        if setup.MOUSE_ACTIVE:
+        if setup.MOUSE_ACTIVE and (current_time - menu_delay_time >= 1):
             menu()
+            menu_delay_time = current_time
 
 
     ### show different frames
@@ -107,4 +117,14 @@ while setup.RUN_LOOP:
 
 
     ### GUI
-    updateGUI()
+    createGUI()
+
+
+    ### hotkeys
+    if keyboard.is_pressed("p") and (current_time - p_delay_time >= 0.5):
+        start_stop_mouse()
+        p_delay_time = current_time
+    if keyboard.is_pressed("s"):
+        stop_auto()
+    if keyboard.is_pressed("q"):
+        quitGUI()

@@ -49,32 +49,32 @@ def phase_detection(p_frame, p_img):
 
 
 def left_click_mouse(frame_top, frame_left, frame_width, frame_height, sleep=0.05):
-    if not keyboard.is_pressed("p"):
-        pg.mouseDown(frame_left + frame_width/2, frame_top + frame_height/2)
-        time.sleep(sleep)
-        pg.mouseUp()
+    #if not keyboard.is_pressed("p"):
+    pg.mouseDown(frame_left + frame_width/2, frame_top + frame_height/2)
+    time.sleep(sleep)
+    pg.mouseUp()
 
 
 def use_card(skill_frame_top, skill_frame_left, rectangles):
-    if not keyboard.is_pressed("p"):
-        for (x, y, w, h) in rectangles:
-            pg.mouseDown(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
-            time.sleep(0.05)
-            pg.mouseUp()
+    #if not keyboard.is_pressed("p"):
+    for (x, y, w, h) in rectangles:
+        pg.mouseDown(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
+        time.sleep(0.05)
+        pg.mouseUp()
 
 
 def move_card(skill_frame_top, skill_frame_left, rectangles):
-    if not keyboard.is_pressed("p"):
-        count = 0
-        for (x, y, w, h) in rectangles:
-            if count == 0:
-                pg.mouseDown(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
-                time.sleep(0.5)
-                count = count + 1
-            else:
-                pg.moveTo(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
-                pg.mouseUp(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
-                time.sleep(0.5)
+    #if not keyboard.is_pressed("p"):
+    count = 0
+    for (x, y, w, h) in rectangles:
+        if count == 0:
+            pg.mouseDown(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
+            time.sleep(0.5)
+            count = count + 1
+        else:
+            pg.moveTo(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
+            pg.mouseUp(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
+            time.sleep(0.5)
 
 
 def skill_detection():
@@ -115,9 +115,9 @@ def frames():
 
 def process_queue(READY, phase):
     if setup.skillQueue.qsize() == 0 and READY:  # skip turn
-        use_card(setup.ready_frame_top, setup.ready_frame_left, img_detection_rectangle(ready_frame, setup.ready_img))
+        use_card(setup.ready_frame_top, setup.ready_frame_left, img_detection_rectangle(setup.ready_frame, setup.ready_img))
 
-    if setup.skillQueue.qsize() >= 1 and not keyboard.is_pressed("p"):
+    if setup.skillQueue.qsize() >= 1:# and not keyboard.is_pressed("p"):
         queue_priority, skill_object, skill_option = setup.skillQueue.get()
         #print(str(queue_priority) + " " + str(skill_object.name) + " " + str(skill_option))
 
@@ -132,12 +132,12 @@ def process_queue(READY, phase):
         elif setup.DEER_AUTO:
             deer_rules(phase, skill_object.name, skill_option)
 
-        if setup.BIRD_AUTO:  # delay
-            time.sleep(0.5)
-        elif setup.DEER_AUTO:
-            time.sleep(1.5)
-        else:
-            time.sleep(1.5)
+        # if setup.BIRD_AUTO:  # delay
+        #     time.sleep(0.5)
+        # elif setup.DEER_AUTO:
+        #     time.sleep(1.5)
+        # else:
+        #     time.sleep(1.5)
 
 
 def menu():  # ok_reset_frame, confirm_reset_frame, select_stage_frame, save_team_frame, confirm_team_frame, use_stamina_potion_frame
@@ -221,7 +221,7 @@ def menu():  # ok_reset_frame, confirm_reset_frame, select_stage_frame, save_tea
             setup.deer_failure_counter = setup.deer_failure_counter + 1
             setup.DEER_FAILURE_COUNTER_SET = True
 
-    time.sleep(1)
+    #time.sleep(1)
     #print("Completions: " + str(setup.completion_counter))
     #print("Failures: " + str(setup.failure_counter))
 

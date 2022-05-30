@@ -1,28 +1,9 @@
 from setup import *
 import setup
 
-from tkinter import *
+from tkinter import Button, Label
 from PIL import Image, ImageTk
 import cv2
-
-
-def exitGUI():
-    setup.RUN_LOOP = False
-    setup.root.destroy()
-    cv2.destroyAllWindows()
-
-
-def start_stop_mouse():
-    setup.MOUSE_ACTIVE = not setup.MOUSE_ACTIVE
-    if setup.MOUSE_ACTIVE:
-        setup.mouse_text.set("Stop Mouse")
-    else:
-        setup.mouse_text.set("Start Mouse")
-
-
-def stop_auto():
-    setup.BIRD_AUTO = False
-    setup.DEER_AUTO = False
 
 
 def bird_auto():
@@ -35,29 +16,35 @@ def deer_auto():
     setup.DEER_AUTO = True
 
 
+def start_stop_mouse(*unused):
+    setup.MOUSE_ACTIVE = not setup.MOUSE_ACTIVE
+    if setup.MOUSE_ACTIVE:
+        setup.mouse_text.set("Stop Mouse")
+    else:
+        setup.mouse_text.set("Start Mouse")
+
+
+def stop_auto(*unused):
+    setup.BIRD_AUTO = False
+    setup.DEER_AUTO = False
+
+
+def quitGUI(*unused):
+    setup.RUN_LOOP = False
+    setup.root.destroy()
+    cv2.destroyAllWindows()
+
+
 def GUI():
     tkinter_width = str(800)
     tkinter_height = str(500)
 
     setup.root.title("Auto 7dsgc")
-    setup.root.geometry(tkinter_width+"x"+tkinter_height)
+    setup.root.geometry(tkinter_width+"x"+tkinter_height + "+1120+0")
     setup.root.attributes("-topmost", True)
 
     setup.skill_label_frame = Label(setup.root, bg="black")
     setup.skill_label_frame.grid(row=0, column=1, rowspan=4, columnspan=14, padx=50, pady=50)
-
-    # exit
-    exit_button = Button(setup.root, text="Exit", command=exitGUI, width=10)
-    exit_button.grid(row=8, column=14)
-
-    # mouse
-    setup.mouse_text.set("Stop Mouse")
-    mouse_button = Button(setup.root, textvariable=setup.mouse_text, command=start_stop_mouse, width=10)
-    mouse_button.grid(row=6, column=14)
-
-    # stop
-    stop_button = Button(setup.root, text="Stop Auto", command=stop_auto, width=10)
-    stop_button.grid(row=7, column=14)
 
     # bird
     bird_button = Button(setup.root, text="Bird", command=bird_auto, width=10)
@@ -79,8 +66,24 @@ def GUI():
     deer_failures_label = Label(setup.root, textvariable=setup.deer_failures_text, font=("Arial", 10))
     deer_failures_label.grid(row=6, column=2)
 
+    # mouse
+    setup.mouse_text.set("Stop Mouse")
+    mouse_button = Button(setup.root, textvariable=setup.mouse_text, command=start_stop_mouse, width=10)
+    #setup.root.bind("<p>", start_stop_mouse)
+    mouse_button.grid(row=6, column=14)
 
-def updateGUI():
+    # stop
+    stop_button = Button(setup.root, text="Stop Auto", command=stop_auto, width=10)
+    #setup.root.bind("<s>", stop_auto)
+    stop_button.grid(row=7, column=14)
+
+    # quit
+    quit_button = Button(setup.root, text="Quit", command=quitGUI, width=10)
+    #setup.root.bind("<q>", quitGUI)
+    quit_button.grid(row=8, column=14)
+
+
+def createGUI():
     skill_img = cv2.cvtColor(setup.skill_frame, cv2.COLOR_BGR2RGB)
     skill_img = ImageTk.PhotoImage(Image.fromarray(skill_img))
     setup.skill_label_frame['image'] = skill_img
