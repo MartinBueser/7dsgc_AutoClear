@@ -38,28 +38,27 @@ while setup.RUN_LOOP:
         #print("READY: " + str(READY))
 
 
-        ## phase detection
+
         if READY:
+            ## phase detection
             phase = phase_detection(setup.phase_frame, [setup.phase1_img, setup.phase2_img, setup.phase3_img, setup.phase4_img])
             #print("phase: " + str(phase))
 
 
-        ## skill detection
-        if READY:
+            ## skill detection
             skill_detection()
 
 
-        ## queue special skills
-        if READY and setup.BIRD_AUTO:
-            gow_bird()
-            brun_bird(phase)
-            mel_bird(phase)
-            #mag_bird()
-            mat_bird()
+            ## queue special skills
+            if setup.BIRD_AUTO:
+                gow_bird()
+                brun_bird(phase)
+                mel_bird(phase)
+                #mag_bird()
+                mat_bird()
 
 
-        ## queue skills
-        if READY:
+            ## queue skills
             if setup.BIRD_AUTO:
                 if phase != 4:
                     phase123_bird()
@@ -76,26 +75,21 @@ while setup.RUN_LOOP:
                     phase4_deer()
 
 
-        ## process queue
-        if READY and setup.MOUSE_ACTIVE:
-            if (setup.BIRD_AUTO or setup.DEER_AUTO) and (setup.current_time - setup.skill_delay_time >= 2.5):  # delay card usage
-                process_queue(READY, phase)
-                setup.skill_delay_time = setup.current_time
-
-        while not setup.skillQueue.empty():  # empty queue
-            flush = setup.skillQueue.get()
-
-
-        ## reset skill count
-        for p in Skills:
-            # print(p.name)
-            p.count = 0
+            ## process queue
+            process_queue(phase)
 
 
         ## menu navigation
-        if setup.MOUSE_ACTIVE and (setup.current_time - setup.menu_delay_time >= 1):
-            menu()
-            setup.menu_delay_time = setup.current_time
+        menu()
+
+
+    while not setup.skillQueue.empty():  # empty queue
+        flush = setup.skillQueue.get()
+
+    ## reset skill count
+    for p in Skills:
+        # print(p.name)
+        p.count = 0
 
 
     ### show different frames

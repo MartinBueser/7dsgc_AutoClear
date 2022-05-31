@@ -37,6 +37,11 @@ def init():
     global sct
     sct = None
 
+    global skill_delay
+    skill_delay = 2.5
+    global menu_delay
+    menu_delay = 1
+
     global current_time
     current_time = time.time()
     global skill_delay_time
@@ -79,6 +84,13 @@ def init():
     BIRD_AUTO = False
     global DEER_AUTO
     DEER_AUTO = False
+
+    global skill_delay_text
+    skill_delay_text = StringVar()
+    skill_delay_text.set(skill_delay)
+    global menu_delay_text
+    menu_delay_text = StringVar()
+    menu_delay_text.set(menu_delay)
 
     global skill_label_frame
     skill_label_frame = None

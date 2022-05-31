@@ -5,8 +5,6 @@ import cv2
 import numpy as np
 import pyautogui as pg
 import time
-import keyboard
-from mss import mss
 
 
 def img_detection(frame, img):
@@ -49,32 +47,32 @@ def phase_detection(p_frame, p_img):
 
 
 def left_click_mouse(frame_top, frame_left, frame_width, frame_height, sleep=0.05):
-    #if not keyboard.is_pressed("p"):
-    pg.mouseDown(frame_left + frame_width/2, frame_top + frame_height/2)
-    time.sleep(sleep)
-    pg.mouseUp()
-
-
-def use_card(skill_frame_top, skill_frame_left, rectangles):
-    #if not keyboard.is_pressed("p"):
-    for (x, y, w, h) in rectangles:
-        pg.mouseDown(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
-        time.sleep(0.05)
+    if setup.MOUSE_ACTIVE:
+        pg.mouseDown(frame_left + frame_width/2, frame_top + frame_height/2)
+        time.sleep(sleep)
         pg.mouseUp()
 
 
-def move_card(skill_frame_top, skill_frame_left, rectangles):
-    #if not keyboard.is_pressed("p"):
-    count = 0
-    for (x, y, w, h) in rectangles:
-        if count == 0:
+def use_card(skill_frame_top, skill_frame_left, rectangles):
+    if setup.MOUSE_ACTIVE:
+        for (x, y, w, h) in rectangles:
             pg.mouseDown(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
-            time.sleep(0.5)
-            count = count + 1
-        else:
-            pg.moveTo(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
-            pg.mouseUp(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
-            time.sleep(0.5)
+            time.sleep(0.05)
+            pg.mouseUp()
+
+
+def move_card(skill_frame_top, skill_frame_left, rectangles):
+    if setup.MOUSE_ACTIVE:
+        count = 0
+        for (x, y, w, h) in rectangles:
+            if count == 0:
+                pg.mouseDown(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
+                time.sleep(0.5)
+                count = count + 1
+            else:
+                pg.moveTo(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
+                pg.mouseUp(skill_frame_left + x + w / 2, skill_frame_top + y + h / 2)
+                time.sleep(0.5)
 
 
 def skill_detection():
@@ -113,117 +111,112 @@ def frames():
     setup.use_stamina_potion_frame = cv2.cvtColor(np.array(setup.sct.grab(setup.use_stamina_potion_frame_box)), cv2.COLOR_BGRA2BGR)
 
 
-def process_queue(READY, phase):
-    if setup.skillQueue.qsize() == 0 and READY:  # skip turn
-        use_card(setup.ready_frame_top, setup.ready_frame_left, img_detection_rectangle(setup.ready_frame, setup.ready_img))
+def process_queue(phase):
+    if setup.current_time - setup.skill_delay_time >= setup.skill_delay:  # delay card usage
+        if setup.skillQueue.qsize() == 0:  # skip turn
+            use_card(setup.ready_frame_top, setup.ready_frame_left, img_detection_rectangle(setup.ready_frame, setup.ready_img))
 
-    if setup.skillQueue.qsize() >= 1:# and not keyboard.is_pressed("p"):
-        queue_priority, skill_object, skill_option = setup.skillQueue.get()
-        #print(str(queue_priority) + " " + str(skill_object.name) + " " + str(skill_option))
+        if setup.skillQueue.qsize() >= 1:
+            queue_priority, skill_object, skill_option = setup.skillQueue.get()
+            #print(str(queue_priority) + " " + str(skill_object.name) + " " + str(skill_option))
 
-        if skill_option == "use":
-            use_card(setup.skill_frame_top, setup.skill_frame_left, skill_object.rectangles)
-        elif skill_option == "move":
-            move_card(setup.skill_frame_top, setup.skill_frame_left, skill_object.rectangles)
+            if skill_option == "use":
+                use_card(setup.skill_frame_top, setup.skill_frame_left, skill_object.rectangles)
+            elif skill_option == "move":
+                move_card(setup.skill_frame_top, setup.skill_frame_left, skill_object.rectangles)
 
-        ## special activation rules
-        if setup.BIRD_AUTO:
-            bird_rules(phase, skill_object.name)
-        elif setup.DEER_AUTO:
-            deer_rules(phase, skill_object.name, skill_option)
+            ## special activation rules
+            if setup.BIRD_AUTO:
+                bird_rules(phase, skill_object.name)
+            elif setup.DEER_AUTO:
+                deer_rules(phase, skill_object.name, skill_option)
 
-        # if setup.BIRD_AUTO:  # delay
-        #     time.sleep(0.5)
-        # elif setup.DEER_AUTO:
-        #     time.sleep(1.5)
-        # else:
-        #     time.sleep(1.5)
+        setup.skill_delay_time = setup.current_time
 
 
 def menu():  # ok_reset_frame, confirm_reset_frame, select_stage_frame, save_team_frame, confirm_team_frame, use_stamina_potion_frame
-    OK = img_detection(setup.ok_reset_frame, setup.ok_img)
-    BIRD_STAGE_OPEN = img_detection(setup.select_stage_frame, setup.stage_open_bird_img)
-    BIRD_STAGE_CLEARED = img_detection(setup.select_stage_frame, setup.stage_cleared_bird_img)
-    DEER_STAGE_OPEN = img_detection(setup.select_stage_frame, setup.stage_open_deer_img)
-    DEER_STAGE_CLEARED = img_detection(setup.select_stage_frame, setup.stage_cleared_deer_img)
-    RESET = img_detection(setup.ok_reset_frame, setup.reset_img)
-    CONFIRM_RESET = img_detection(setup.confirm_reset_frame, setup.confirm_reset_img)
-    SET_PARTY = img_detection(setup.ok_reset_frame, setup.set_party_img)
-    SAVE_TEAM = img_detection(setup.save_team_frame, setup.save_team_img)
-    CONFIRM_TEAM = img_detection(setup.confirm_team_frame, setup.confirm_team_img)
-    WEEKLY_RESET_OK = img_detection(setup.confirm_team_frame, setup.weekly_reset_ok_img)
-    START_STAGE = img_detection(setup.ok_reset_frame, setup.start_img)
-    USE_STAMINA_POTION = img_detection(setup.use_stamina_potion_frame, setup.use_stamina_potion_img)
-    RECONNECT = img_detection(setup.confirm_reset_frame, setup.reconnect_img)
-    FAILED_OK = img_detection(setup.ok_reset_frame, setup.failed_ok_img)
+    if setup.current_time - setup.menu_delay_time >= setup.menu_delay:
+        OK = img_detection(setup.ok_reset_frame, setup.ok_img)
+        BIRD_STAGE_OPEN = img_detection(setup.select_stage_frame, setup.stage_open_bird_img)
+        BIRD_STAGE_CLEARED = img_detection(setup.select_stage_frame, setup.stage_cleared_bird_img)
+        DEER_STAGE_OPEN = img_detection(setup.select_stage_frame, setup.stage_open_deer_img)
+        DEER_STAGE_CLEARED = img_detection(setup.select_stage_frame, setup.stage_cleared_deer_img)
+        RESET = img_detection(setup.ok_reset_frame, setup.reset_img)
+        CONFIRM_RESET = img_detection(setup.confirm_reset_frame, setup.confirm_reset_img)
+        SET_PARTY = img_detection(setup.ok_reset_frame, setup.set_party_img)
+        SAVE_TEAM = img_detection(setup.save_team_frame, setup.save_team_img)
+        CONFIRM_TEAM = img_detection(setup.confirm_team_frame, setup.confirm_team_img)
+        WEEKLY_RESET_OK = img_detection(setup.confirm_team_frame, setup.weekly_reset_ok_img)
+        START_STAGE = img_detection(setup.ok_reset_frame, setup.start_img)
+        USE_STAMINA_POTION = img_detection(setup.use_stamina_potion_frame, setup.use_stamina_potion_img)
+        RECONNECT = img_detection(setup.confirm_reset_frame, setup.reconnect_img)
+        FAILED_OK = img_detection(setup.ok_reset_frame, setup.failed_ok_img)
 
-    if OK:
-        #print("ok")
-        left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
-        if setup.BIRD_AUTO and not setup.BIRD_COMPLETION_COUNTER_SET:
-            setup.bird_completion_counter = setup.bird_completion_counter + 1
-            setup.BIRD_COMPLETION_COUNTER_SET = True
-        elif setup.DEER_AUTO and not setup.DEER_COMPLETION_COUNTER_SET:
-            setup.deer_completion_counter = setup.deer_completion_counter + 1
-            setup.DEER_COMPLETION_COUNTER_SET = True
-    if CONFIRM_RESET:
-        #print("confirm reset")
-        left_click_mouse(setup.confirm_reset_frame_top, setup.confirm_reset_frame_left, setup.confirm_reset_frame_width, setup.confirm_reset_frame_height)
-    elif (BIRD_STAGE_CLEARED or DEER_STAGE_CLEARED) and RESET:
-        #print("stage cleared")
-        #print("reset")
-        left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
-    if (BIRD_STAGE_OPEN or DEER_STAGE_OPEN) and SET_PARTY:
-        #print("stage open")
-        #print("set party")
-        left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
-    if CONFIRM_TEAM:
-        #print("confirm team")
-        left_click_mouse(setup.confirm_team_frame_top, setup.confirm_team_frame_left, setup.confirm_team_frame_width, setup.confirm_team_frame_height)
-    elif SAVE_TEAM:
-        #print("save team")
-        left_click_mouse(setup.save_team_frame_top, setup.save_team_frame_left, setup.save_team_frame_width, setup.save_team_frame_height)
-    if (BIRD_STAGE_OPEN or DEER_STAGE_OPEN) and RESET:
-        #print("stage open")
-        left_click_mouse(setup.select_stage_frame_top, setup.select_stage_frame_left, setup.select_stage_frame_width, setup.select_stage_frame_height)
-    if USE_STAMINA_POTION:
-        #print("use stamina potion")
-        left_click_mouse(setup.use_stamina_potion_frame_top, setup.use_stamina_potion_frame_left, setup.use_stamina_potion_frame_width, setup.use_stamina_potion_frame_height)
-    elif WEEKLY_RESET_OK:
-        #print("weekly reset ok")
-        left_click_mouse(setup.confirm_team_frame_top, setup.confirm_team_frame_left, setup.confirm_team_frame_width, setup.confirm_team_frame_height)
-    elif START_STAGE:
-        #print("start stage")
-        left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
-        setup.BIRD_COMPLETION_COUNTER_SET = False
-        setup.BIRD_FAILURE_COUNTER_SET = False
-        setup.DEER_COMPLETION_COUNTER_SET = False
-        setup.DEER_FAILURE_COUNTER_SET = False
-        if setup.BIRD_AUTO:
-            setup.mat2_delay_counter = 0
-        elif setup.DEER_AUTO:
-            setup.red_card_delay_phase2 = 0
-            setup.green_card_delay_phase2 = 100
-            setup.blue_card_delay_phase2 = 100
-            setup.red_card_delay_phase4 = 100
-            setup.green_card_delay_phase4 = 100
-            setup.blue_card_delay_phase4 = 0
-    if RECONNECT:
-        #print("reconnect")
-        left_click_mouse(setup.confirm_reset_frame_top, setup.confirm_reset_frame_left, setup.confirm_reset_frame_width, setup.confirm_reset_frame_height)
-    if FAILED_OK:
-        #print("failed ok")
-        left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
-        if setup.BIRD_AUTO and not setup.BIRD_FAILURE_COUNTER_SET:
-            setup.bird_failure_counter = setup.bird_failure_counter + 1
-            setup.BIRD_FAILURE_COUNTER_SET = True
-        elif setup.DEER_AUTO and not setup.DEER_FAILURE_COUNTER_SET:
-            setup.deer_failure_counter = setup.deer_failure_counter + 1
-            setup.DEER_FAILURE_COUNTER_SET = True
+        if OK:
+            #print("ok")
+            left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
+            if setup.BIRD_AUTO and not setup.BIRD_COMPLETION_COUNTER_SET:
+                setup.bird_completion_counter = setup.bird_completion_counter + 1
+                setup.BIRD_COMPLETION_COUNTER_SET = True
+            elif setup.DEER_AUTO and not setup.DEER_COMPLETION_COUNTER_SET:
+                setup.deer_completion_counter = setup.deer_completion_counter + 1
+                setup.DEER_COMPLETION_COUNTER_SET = True
+        if CONFIRM_RESET:
+            #print("confirm reset")
+            left_click_mouse(setup.confirm_reset_frame_top, setup.confirm_reset_frame_left, setup.confirm_reset_frame_width, setup.confirm_reset_frame_height)
+        elif (BIRD_STAGE_CLEARED or DEER_STAGE_CLEARED) and RESET:
+            #print("stage cleared")
+            #print("reset")
+            left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
+        if (BIRD_STAGE_OPEN or DEER_STAGE_OPEN) and SET_PARTY:
+            #print("stage open")
+            #print("set party")
+            left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
+        if CONFIRM_TEAM:
+            #print("confirm team")
+            left_click_mouse(setup.confirm_team_frame_top, setup.confirm_team_frame_left, setup.confirm_team_frame_width, setup.confirm_team_frame_height)
+        elif SAVE_TEAM:
+            #print("save team")
+            left_click_mouse(setup.save_team_frame_top, setup.save_team_frame_left, setup.save_team_frame_width, setup.save_team_frame_height)
+        if (BIRD_STAGE_OPEN or DEER_STAGE_OPEN) and RESET:
+            #print("stage open")
+            left_click_mouse(setup.select_stage_frame_top, setup.select_stage_frame_left, setup.select_stage_frame_width, setup.select_stage_frame_height)
+        if USE_STAMINA_POTION:
+            #print("use stamina potion")
+            left_click_mouse(setup.use_stamina_potion_frame_top, setup.use_stamina_potion_frame_left, setup.use_stamina_potion_frame_width, setup.use_stamina_potion_frame_height)
+        elif WEEKLY_RESET_OK:
+            #print("weekly reset ok")
+            left_click_mouse(setup.confirm_team_frame_top, setup.confirm_team_frame_left, setup.confirm_team_frame_width, setup.confirm_team_frame_height)
+        elif START_STAGE:
+            #print("start stage")
+            left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
+            setup.BIRD_COMPLETION_COUNTER_SET = False
+            setup.BIRD_FAILURE_COUNTER_SET = False
+            setup.DEER_COMPLETION_COUNTER_SET = False
+            setup.DEER_FAILURE_COUNTER_SET = False
+            if setup.BIRD_AUTO:
+                setup.mat2_delay_counter = 0
+            elif setup.DEER_AUTO:
+                setup.red_card_delay_phase2 = 0
+                setup.green_card_delay_phase2 = 100
+                setup.blue_card_delay_phase2 = 100
+                setup.red_card_delay_phase4 = 100
+                setup.green_card_delay_phase4 = 100
+                setup.blue_card_delay_phase4 = 0
+        if RECONNECT:
+            #print("reconnect")
+            left_click_mouse(setup.confirm_reset_frame_top, setup.confirm_reset_frame_left, setup.confirm_reset_frame_width, setup.confirm_reset_frame_height)
+        if FAILED_OK:
+            #print("failed ok")
+            left_click_mouse(setup.ok_reset_frame_top, setup.ok_reset_frame_left, setup.ok_reset_frame_width, setup.ok_reset_frame_height)
+            if setup.BIRD_AUTO and not setup.BIRD_FAILURE_COUNTER_SET:
+                setup.bird_failure_counter = setup.bird_failure_counter + 1
+                setup.BIRD_FAILURE_COUNTER_SET = True
+            elif setup.DEER_AUTO and not setup.DEER_FAILURE_COUNTER_SET:
+                setup.deer_failure_counter = setup.deer_failure_counter + 1
+                setup.DEER_FAILURE_COUNTER_SET = True
 
-    #time.sleep(1)
-    #print("Completions: " + str(setup.completion_counter))
-    #print("Failures: " + str(setup.failure_counter))
+        setup.menu_delay_time = setup.current_time
 
 
 def gow_bird():  # rank up
