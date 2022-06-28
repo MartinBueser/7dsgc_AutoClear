@@ -40,7 +40,7 @@ def init():
     global skill_delay
     skill_delay = 2.5
     global menu_delay
-    menu_delay = 1
+    menu_delay = 4
 
     global current_time
     current_time = time.time()
@@ -62,8 +62,24 @@ def init():
     phase_frame = None
     global ok_reset_frame
     ok_reset_frame = None
-    global select_stage_frame
-    select_stage_frame = None
+    global select_stage_1_frame
+    select_stage_1_frame = None
+    global select_stage_2_frame
+    select_stage_2_frame = None
+    global select_stage_3_frame
+    select_stage_3_frame = None
+    global STAGE_1
+    STAGE_1 = False
+    global STAGE_2
+    STAGE_2 = True
+    global STAGE_3
+    STAGE_3 = False
+    global phase
+    phase = 1
+    global RUSH_STAGE2_PHASE3
+    RUSH_STAGE2_PHASE3 = False
+    global STAGE3_PHASE3_HP_MIN
+    STAGE3_PHASE3_HP_MIN = False
     global confirm_reset_frame
     confirm_reset_frame = None
     global save_team_frame
@@ -72,6 +88,16 @@ def init():
     confirm_team_frame = None
     global use_stamina_potion_frame
     use_stamina_potion_frame = None
+    global team_frame
+    team_frame = None
+    global matrona_health_frame
+    matrona_health_frame = None
+    global beast_status_bar_frame
+    beast_status_bar_frame = None
+    global boss_hp_frame
+    boss_hp_frame = None
+    global forfeit_battle_frame
+    forfeit_battle_frame = None
 
     # tkinter gui
     global root
@@ -80,17 +106,23 @@ def init():
     RUN_LOOP = True
     global MOUSE_ACTIVE
     MOUSE_ACTIVE = True
+    global PAUSE
+    PAUSE = False
     global BIRD_AUTO
     BIRD_AUTO = False
     global DEER_AUTO
     DEER_AUTO = False
+    global DEATH_MATCH
+    DEATH_MATCH = False
+    global DAILY
+    DAILY = False
 
     global skill_delay_text
     skill_delay_text = StringVar()
-    skill_delay_text.set(skill_delay)
+    skill_delay_text.set(str(skill_delay))
     global menu_delay_text
     menu_delay_text = StringVar()
-    menu_delay_text.set(menu_delay)
+    menu_delay_text.set(str(menu_delay))
 
     global skill_label_frame
     skill_label_frame = None
@@ -106,20 +138,34 @@ def init():
     deer_failures_text = StringVar()
 
     # bird
-    global mag2_delay
-    mag2_delay = int()
     global mat2_delay
     mat2_delay = int()
     global mat2_delay_counter
     mat2_delay_counter = 0
+    global ATTACK
+    ATTACK = False
+    global EVASION
+    EVASION = False
+    global REFLECT
+    REFLECT = False
+    global buff_remove_forward
+    buff_remove_forward = 0
     global BIRD_COMPLETION_COUNTER_SET
     BIRD_COMPLETION_COUNTER_SET = False
     global BIRD_FAILURE_COUNTER_SET
     BIRD_FAILURE_COUNTER_SET = False
-    global bird_completion_counter
-    bird_completion_counter = 0
-    global bird_failure_counter
-    bird_failure_counter = 0
+    global bird_completion_counter1
+    bird_completion_counter1 = 0
+    global bird_completion_counter2
+    bird_completion_counter2 = 0
+    global bird_completion_counter3
+    bird_completion_counter3 = 0
+    global bird_failure_counter1
+    bird_failure_counter1 = 0
+    global bird_failure_counter2
+    bird_failure_counter2 = 0
+    global bird_failure_counter3
+    bird_failure_counter3 = 0
     # deer
     global red_card_delay_phase2
     red_card_delay_phase2 = 0
@@ -151,8 +197,8 @@ def setup_frame():
     global ready_frame_height
     global ready_frame_box
     ready_frame_top = 715
-    ready_frame_left = 840
-    ready_frame_width = 260
+    ready_frame_left = 820
+    ready_frame_width = 280
     ready_frame_height = 100
     ready_frame_box = {"top": ready_frame_top, "left": ready_frame_left, "width": ready_frame_width, "height": ready_frame_height}
 
@@ -192,17 +238,41 @@ def setup_frame():
     ok_reset_frame_height = 80
     ok_reset_frame_box = {"top": ok_reset_frame_top, "left": ok_reset_frame_left, "width": ok_reset_frame_width, "height": ok_reset_frame_height}
 
-    ## select stage (center)
-    global select_stage_frame_top
-    global select_stage_frame_left
-    global select_stage_frame_width
-    global select_stage_frame_height
-    global select_stage_frame_box
-    select_stage_frame_top = 700
-    select_stage_frame_left = 890
-    select_stage_frame_width = 100
-    select_stage_frame_height = 100
-    select_stage_frame_box = {"top": select_stage_frame_top, "left": select_stage_frame_left, "width": select_stage_frame_width, "height": select_stage_frame_height}
+    ## select stage 1 (center)
+    global select_stage_1_frame_top
+    global select_stage_1_frame_left
+    global select_stage_1_frame_width
+    global select_stage_1_frame_height
+    global select_stage_1_frame_box
+    select_stage_1_frame_top = 700
+    select_stage_1_frame_left = 890
+    select_stage_1_frame_width = 100
+    select_stage_1_frame_height = 100
+    select_stage_1_frame_box = {"top": select_stage_1_frame_top, "left": select_stage_1_frame_left, "width": select_stage_1_frame_width, "height": select_stage_1_frame_height}
+
+    ## select stage 2 (center)
+    global select_stage_2_frame_top
+    global select_stage_2_frame_left
+    global select_stage_2_frame_width
+    global select_stage_2_frame_height
+    global select_stage_2_frame_box
+    select_stage_2_frame_top = 540
+    select_stage_2_frame_left = 890
+    select_stage_2_frame_width = 100
+    select_stage_2_frame_height = 100
+    select_stage_2_frame_box = {"top": select_stage_2_frame_top, "left": select_stage_2_frame_left, "width": select_stage_2_frame_width, "height": select_stage_2_frame_height}
+
+    ## select stage 3 (center)
+    global select_stage_3_frame_top
+    global select_stage_3_frame_left
+    global select_stage_3_frame_width
+    global select_stage_3_frame_height
+    global select_stage_3_frame_box
+    select_stage_3_frame_top = 380
+    select_stage_3_frame_left = 890
+    select_stage_3_frame_width = 100
+    select_stage_3_frame_height = 100
+    select_stage_3_frame_box = {"top": select_stage_3_frame_top, "left": select_stage_3_frame_left, "width": select_stage_3_frame_width, "height": select_stage_3_frame_height}
 
     ## confirm reset (center right)
     global confirm_reset_frame_top
@@ -252,32 +322,222 @@ def setup_frame():
     use_stamina_potion_frame_height = 70
     use_stamina_potion_frame_box = {"top": use_stamina_potion_frame_top, "left": use_stamina_potion_frame_left, "width": use_stamina_potion_frame_width, "height": use_stamina_potion_frame_height}
 
+    ## team
+    global team_frame_top
+    global team_frame_left
+    global team_frame_width
+    global team_frame_height
+    global team_frame_box
+    team_frame_top = 877
+    team_frame_left = 824
+    team_frame_width = 270
+    team_frame_height = 67
+    team_frame_box = {"top": team_frame_top, "left": team_frame_left, "width": team_frame_width, "height": team_frame_height}
 
-def setup_menu():
+    ## matrona health
+    global matrona_health_frame_top
+    global matrona_health_frame_left
+    global matrona_health_frame_width
+    global matrona_health_frame_height
+    global matrona_health_frame_box
+    matrona_health_frame_top = 948
+    matrona_health_frame_left = 960
+    matrona_health_frame_width = 70
+    matrona_health_frame_height = 10
+    matrona_health_frame_box = {"top": matrona_health_frame_top, "left": matrona_health_frame_left, "width": matrona_health_frame_width, "height": matrona_health_frame_height}
+
+    ## beast status bar frame
+    global beast_status_bar_frame_top
+    global beast_status_bar_frame_left
+    global beast_status_bar_frame_width
+    global beast_status_bar_frame_height
+    global beast_status_bar_frame_box
+    beast_status_bar_frame_top = 46
+    beast_status_bar_frame_left = 178
+    beast_status_bar_frame_width = 400
+    beast_status_bar_frame_height = 35
+    beast_status_bar_frame_box = {"top": beast_status_bar_frame_top, "left": beast_status_bar_frame_left, "width": beast_status_bar_frame_width, "height": beast_status_bar_frame_height}
+
+    ## boss hp frame
+    global boss_hp_frame_top
+    global boss_hp_frame_left
+    global boss_hp_frame_width
+    global boss_hp_frame_height
+    global boss_hp_frame_box
+    boss_hp_frame_top = 80
+    boss_hp_frame_left = 160
+    boss_hp_frame_width = 310
+    boss_hp_frame_height = 20
+    boss_hp_frame_box = {"top": boss_hp_frame_top, "left": boss_hp_frame_left, "width": boss_hp_frame_width, "height": boss_hp_frame_height}
+
+    ## forfeit battle frame
+    global forfeit_battle_frame_top
+    global forfeit_battle_frame_left
+    global forfeit_battle_frame_width
+    global forfeit_battle_frame_height
+    global forfeit_battle_frame_box
+    forfeit_battle_frame_top = 643
+    forfeit_battle_frame_left = 870
+    forfeit_battle_frame_width = 180
+    forfeit_battle_frame_height = 30
+    forfeit_battle_frame_box = {"top": forfeit_battle_frame_top, "left": forfeit_battle_frame_left, "width": forfeit_battle_frame_width, "height": forfeit_battle_frame_height}
+
+    ## full frame
+    global frame_top
+    global frame_left
+    global frame_width
+    global frame_height
+    global frame_box
+    frame_top = 30
+    frame_left = 50
+    frame_width = 1820
+    frame_height = 1050
+    frame_box = {"top": frame_top, "left": frame_left, "width": frame_width, "height": frame_height}
+
+
+def setup_death_match():
     ## image pathes
-    ready_path = "images/ready.png"
-    phase1_path = "images/phase1.png"
-    phase2_path = "images/phase2.png"
-    phase3_path = "images/phase3.png"
-    phase4_path = "images/phase4.png"
-    ok_path = "images/ok.png"
-    reset_path = "images/reset.png"
-    set_party_path = "images/set_party.png"
-    start_path = "images/start.png"
-    confirm_reset_path = "images/confirm_reset.png"
-    save_team_path = "images/save.png"
-    confirm_team_path = "images/confirm_ok.png"
-    weekly_reset_ok_path = "images/weekly_reset_ok.png"
-    use_stamina_potion_path = "images/use_stamina_potion.png"
-    reconnect_path = "images/reconnect.png"
-    failed_ok_path = "images/failed_ok.png"
+    battle_path = "images/menu/Battle.png"
+    boss_battle_path = "images/menu/Boss_Battle.png"
+    death_match_chance_0_path = "images/menu/death_match_chance_0.png"
+    boss_battle_extreme_path = "images/menu/boss_battle_extreme.png"
+    auto_clear_path = "images/menu/auto_clear.png"
+    start_auto_clear_path = "images/menu/start_auto_clear.png"
+    death_match_ok_path = "images/menu/death_match_ok.png"
+    death_match_hell_path = "images/menu/death_match_hell.png"
+    ai_path = "images/menu/AI.png"
+    invite_ai_path = "images/menu/invite_ai.png"
+    preparation_complete_path = "images/menu/preparation_complete.png"
+    death_match_start_path = "images/menu/death_match_start.png"
+    death_match_success_ok_path = "images/menu/death_match_success_ok.png"
+    auto_path = "images/battle/auto.png"
+
+    global battle_img
+    battle_img = cv2.imread(battle_path)
+    global boss_battle_img
+    boss_battle_img = cv2.imread(boss_battle_path)
+    global death_match_chance_0_img
+    death_match_chance_0_img = cv2.imread(death_match_chance_0_path)
+    global boss_battle_extreme_img
+    boss_battle_extreme_img = cv2.imread(boss_battle_extreme_path)
+    global auto_clear_img
+    auto_clear_img = cv2.imread(auto_clear_path)
+    global start_auto_clear_img
+    start_auto_clear_img = cv2.imread(start_auto_clear_path)
+    global death_match_ok_img
+    death_match_ok_img = cv2.imread(death_match_ok_path)
+    global death_match_hell_img
+    death_match_hell_img = cv2.imread(death_match_hell_path)
+    global ai_img
+    ai_img = cv2.imread(ai_path)
+    global invite_ai_img
+    invite_ai_img = cv2.imread(invite_ai_path)
+    global preparation_complete_img
+    preparation_complete_img = cv2.imread(preparation_complete_path)
+    global death_match_start_img
+    death_match_start_img = cv2.imread(death_match_start_path)
+    global death_match_success_ok_img
+    death_match_success_ok_img = cv2.imread(death_match_success_ok_path)
+    global auto_img
+    auto_img = cv2.imread(auto_path)
+
+
+# def setup_daily_menu():
+#     ## image pathes
+#     tavern_path = "images/menu/Tavern.png"
+#     quests_path = "images/menu/Quests.png"
+#     heroes_path = "images/menu/Heroes.png"
+#     draw_path = "images/menu/Draw.png"
+#     shop_path = "images/menu/Shop.png"
+#
+#     menu_path = "images/menu/Menu.png"
+#     friends_path = "images/menu/Friends.png"
+#     send_all_path = "images/menu/Send_All.png"
+#
+#     mail_path = "images/menu/mail.png"
+#     friendship_path = "images/menu/Friendship.png"
+#     claim_all_path = "images/menu/Claim_All.png"
+#     claim_all_gray_path = "images/menu/Claim_All_gray.png"
+#
+#     global tavern_img
+#     tavern_img = cv2.imread(tavern_path)
+#     global quests_img
+#     quests_img = cv2.imread(quests_path)
+#     global heroes_img
+#     heroes_img = cv2.imread(heroes_path)
+#     global draw_img
+#     draw_img = cv2.imread(draw_path)
+#     global shop_img
+#     shop_img = cv2.imread(shop_path)
+#
+#     global menu_img
+#     menu_img = cv2.imread(menu_path)
+#     global friends_img
+#     friends_img = cv2.imread(friends_path)
+#     global send_all_img
+#     send_all_img = cv2.imread(send_all_path)
+#
+#     global mail_img
+#     mail_img = cv2.imread(mail_path)
+#     global friendship_img
+#     friendship_img = cv2.imread(friendship_path)
+#     global claim_all_img
+#     claim_all_img = cv2.imread(claim_all_path)
+#     global claim_all_gray_img
+#     claim_all_gray_img = cv2.imread(claim_all_gray_path)
+
+
+# def setup_daily_states():
+#     global FRIENDS_STATE
+#     FRIENDS_STATE = True
+#
+#     global MAIL_STATE
+#     MAIL_STATE = False
+#
+#     global SHOP_STATE
+#     SHOP_STATE = False
+#     global EQUIPMENT_DRAW_STATE
+#     EQUIPMENT_DRAW_STATE = False
+#     global COIN_SHOP_STATE
+#     COIN_SHOP_STATE = False
+
+
+def setup_demonic_beast_battle_menu():
+    ## image pathes
+    ready_path = "images/battle/ready.png"
+    phase1_path = "images/battle/phase1.png"
+    phase2_path = "images/battle/phase2.png"
+    phase3_path = "images/battle/phase3.png"
+    phase4_path = "images/battle/phase4.png"
+    ok_path = "images/menu/ok.png"
+    reset_path = "images/menu/reset.png"
+    set_party_path = "images/menu/set_party.png"
+    start_path = "images/menu/start.png"
+    confirm_reset_path = "images/menu/confirm_reset.png"
+    save_team_path = "images/menu/save.png"
+    confirm_team_path = "images/menu/confirm_ok.png"
+    weekly_reset_ok_path = "images/menu/weekly_reset_ok.png"
+    use_stamina_potion_path = "images/menu/use_stamina_potion.png"
+    reconnect_path = "images/menu/reconnect.png"
+    failed_ok_path = "images/menu/failed_ok.png"
+    attack_buff_path = "images/battle/attack_buff.png"
+    evasion_buff_path = "images/battle/evasion_buff.png"
+    reflect_buff_path = "images/battle/reflect_buff.png"
+    forfeit_battle_path = "images/menu/forfeit_battle.png"
 
     # bird
-    stage_open_bird_path = "images/stage_open_bird.png"
-    stage_cleared_bird_path = "images/stage_cleared_bird.png"
+    stage_open_bird_1_path = "images/demonic_beast/stage_open_bird_1.png"
+    stage_open_bird_2_path = "images/demonic_beast/stage_open_bird_2.png"
+    stage_open_bird_3_path = "images/demonic_beast/stage_open_bird_3.png"
+    stage_cleared_bird_path = "images/demonic_beast/stage_cleared_bird.png"
+    team_bird_path = "images/demonic_beast/team_bird.png"
+    matrona_health_min2_path = "images/demonic_beast/matrona_health_min2.png"
+    matrona_health_min3_path = "images/demonic_beast/matrona_health_min3.png"
+    stage3_phase3_hp_min_path = "images/demonic_beast/stage3_phase3_hp_min.png"
     # deer
-    stage_open_deer_path = "images/stage_open_deer.png"
-    stage_cleared_deer_path = "images/stage_cleared_deer.png"
+    stage_open_deer_path = "images/demonic_beast/stage_open_deer.png"
+    stage_cleared_deer_path = "images/demonic_beast/stage_cleared_deer.png"
+    # team_deer_path = "images/demonic_beast/team_deer.png"
 
     ## images
     global ready_img
@@ -312,85 +572,99 @@ def setup_menu():
     reconnect_img = cv2.imread(reconnect_path)
     global failed_ok_img
     failed_ok_img = cv2.imread(failed_ok_path)
+    global attack_buff_img
+    attack_buff_img = cv2.imread(attack_buff_path)
+    global evasion_buff_img
+    evasion_buff_img = cv2.imread(evasion_buff_path)
+    global reflect_buff_img
+    reflect_buff_img = cv2.imread(reflect_buff_path)
+    global forfeit_battle_img
+    forfeit_battle_img = cv2.imread(forfeit_battle_path)
 
     # bird
-    global stage_open_bird_img
-    stage_open_bird_img = cv2.imread(stage_open_bird_path)
+    global stage_open_bird_1_img
+    stage_open_bird_1_img = cv2.imread(stage_open_bird_1_path)
+    global stage_open_bird_2_img
+    stage_open_bird_2_img = cv2.imread(stage_open_bird_2_path)
+    global stage_open_bird_3_img
+    stage_open_bird_3_img = cv2.imread(stage_open_bird_3_path)
     global stage_cleared_bird_img
     stage_cleared_bird_img = cv2.imread(stage_cleared_bird_path)
+    global team_bird_img
+    team_bird_img = cv2.imread(team_bird_path)
+    global matrona_health_min2_img
+    matrona_health_min2_img = cv2.imread(matrona_health_min2_path)
+    global matrona_health_min3_img
+    matrona_health_min3_img = cv2.imread(matrona_health_min3_path)
+    global stage3_phase3_hp_min_img
+    stage3_phase3_hp_min_img = cv2.imread(stage3_phase3_hp_min_path)
     # deer
     global stage_open_deer_img
     stage_open_deer_img = cv2.imread(stage_open_deer_path)
     global stage_cleared_deer_img
     stage_cleared_deer_img = cv2.imread(stage_cleared_deer_path)
+    # global team_deer_img
+    # team_deer_img = cv2.imread(team_deer_path)
 
 
 def setup_cards():
     ## image pathes
     # brun
-    brun1_lvl1_path = "images/brun1_lvl1.png"
-    brun2_lvl1_path = "images/brun2_lvl1.png"
-    brun1_lvl2_path = "images/brun1_lvl2.png"
-    brun2_lvl2_path = "images/brun2_lvl2.png"
-    brun1_lvl3_path = "images/brun1_lvl3.png"
-    brun2_lvl3_path = "images/brun2_lvl3.png"
-    brun_ult_path = "images/brun_ult.png"
-    # mag
-    mag1_lvl1_path = "images/mag1_lvl1.png"
-    mag2_lvl1_path = "images/mag2_lvl1.png"
-    mag1_lvl2_path = "images/mag1_lvl2.png"
-    mag2_lvl2_path = "images/mag2_lvl2.png"
-    mag1_lvl3_path = "images/mag1_lvl3.png"
-    mag2_lvl3_path = "images/mag2_lvl3.png"
-    mag_ult_path = "images/mag_ult.png"
+    brun1_lvl1_path = "images/skills/brun1_lvl1.png"
+    brun2_lvl1_path = "images/skills/brun2_lvl1.png"
+    brun1_lvl2_path = "images/skills/brun1_lvl2.png"
+    brun2_lvl2_path = "images/skills/brun2_lvl2.png"
+    brun1_lvl3_path = "images/skills/brun1_lvl3.png"
+    brun2_lvl3_path = "images/skills/brun2_lvl3.png"
+    brun_ult_path = "images/skills/brun_ult.png"
     # mat
-    mat1_lvl1_path = "images/mat1_lvl1.png"
-    mat2_lvl1_path = "images/mat2_lvl1.png"
-    mat1_lvl2_path = "images/mat1_lvl2.png"
-    mat2_lvl2_path = "images/mat2_lvl2.png"
-    mat1_lvl3_path = "images/mat1_lvl3.png"
-    mat2_lvl3_path = "images/mat2_lvl3.png"
-    mat_ult_path = "images/mat_ult.png"
+    mat1_lvl1_path = "images/skills/mat1_lvl1.png"
+    mat2_lvl1_path = "images/skills/mat2_lvl1.png"
+    mat1_lvl2_path = "images/skills/mat1_lvl2.png"
+    mat2_lvl2_path = "images/skills/mat2_lvl2.png"
+    mat1_lvl3_path = "images/skills/mat1_lvl3.png"
+    mat2_lvl3_path = "images/skills/mat2_lvl3.png"
+    mat_ult_path = "images/skills/mat_ult.png"
     # gow
-    gow1_lvl1_path = "images/gow1_lvl1.png"
-    gow2_lvl1_path = "images/gow2_lvl1.png"
-    gow1_lvl2_path = "images/gow1_lvl2.png"
-    gow2_lvl2_path = "images/gow2_lvl2.png"
-    gow1_lvl3_path = "images/gow1_lvl3.png"
-    gow2_lvl3_path = "images/gow2_lvl3.png"
-    gow_ult_path = "images/gow_ult.png"
+    gow1_lvl1_path = "images/skills/gow1_lvl1.png"
+    gow2_lvl1_path = "images/skills/gow2_lvl1.png"
+    gow1_lvl2_path = "images/skills/gow1_lvl2.png"
+    gow2_lvl2_path = "images/skills/gow2_lvl2.png"
+    gow1_lvl3_path = "images/skills/gow1_lvl3.png"
+    gow2_lvl3_path = "images/skills/gow2_lvl3.png"
+    gow_ult_path = "images/skills/gow_ult.png"
     # mel
-    mel1_lvl1_path = "images/mel1_lvl1.png"
-    mel2_lvl1_path = "images/mel2_lvl1.png"
-    mel1_lvl2_path = "images/mel1_lvl2.png"
-    mel2_lvl2_path = "images/mel2_lvl2.png"
-    mel1_lvl3_path = "images/mel1_lvl3.png"
-    mel2_lvl3_path = "images/mel2_lvl3.png"
-    mel_ult_path = "images/mel_ult.png"
+    mel1_lvl1_path = "images/skills/mel1_lvl1.png"
+    mel2_lvl1_path = "images/skills/mel2_lvl1.png"
+    mel1_lvl2_path = "images/skills/mel1_lvl2.png"
+    mel2_lvl2_path = "images/skills/mel2_lvl2.png"
+    mel1_lvl3_path = "images/skills/mel1_lvl3.png"
+    mel2_lvl3_path = "images/skills/mel2_lvl3.png"
+    mel_ult_path = "images/skills/mel_ult.png"
     # jor
-    jor1_lvl1_path = "images/jor1_lvl1.png"
-    jor2_lvl1_path = "images/jor2_lvl1.png"
-    jor1_lvl2_path = "images/jor1_lvl2.png"
-    jor2_lvl2_path = "images/jor2_lvl2.png"
-    jor1_lvl3_path = "images/jor1_lvl3.png"
-    jor2_lvl3_path = "images/jor2_lvl3.png"
-    jor_ult_path = "images/jor_ult.png"
+    jor1_lvl1_path = "images/skills/jor1_lvl1.png"
+    jor2_lvl1_path = "images/skills/jor2_lvl1.png"
+    jor1_lvl2_path = "images/skills/jor1_lvl2.png"
+    jor2_lvl2_path = "images/skills/jor2_lvl2.png"
+    jor1_lvl3_path = "images/skills/jor1_lvl3.png"
+    jor2_lvl3_path = "images/skills/jor2_lvl3.png"
+    jor_ult_path = "images/skills/jor_ult.png"
     # skadi
-    skadi1_lvl1_path = "images/skadi1_lvl1.png"
-    skadi2_lvl1_path = "images/skadi2_lvl1.png"
-    skadi1_lvl2_path = "images/skadi1_lvl2.png"
-    skadi2_lvl2_path = "images/skadi2_lvl2.png"
-    skadi1_lvl3_path = "images/skadi1_lvl3.png"
-    skadi2_lvl3_path = "images/skadi2_lvl3.png"
-    skadi_ult_path = "images/skadi_ult.png"
+    skadi1_lvl1_path = "images/skills/skadi1_lvl1.png"
+    skadi2_lvl1_path = "images/skills/skadi2_lvl1.png"
+    skadi1_lvl2_path = "images/skills/skadi1_lvl2.png"
+    skadi2_lvl2_path = "images/skills/skadi2_lvl2.png"
+    skadi1_lvl3_path = "images/skills/skadi1_lvl3.png"
+    skadi2_lvl3_path = "images/skills/skadi2_lvl3.png"
+    skadi_ult_path = "images/skills/skadi_ult.png"
     # one
-    one1_lvl1_path = "images/one1_lvl1.png"
-    one2_lvl1_path = "images/one2_lvl1.png"
-    one1_lvl2_path = "images/one1_lvl2.png"
-    one2_lvl2_path = "images/one2_lvl2.png"
-    one1_lvl3_path = "images/one1_lvl3.png"
-    one2_lvl3_path = "images/one2_lvl3.png"
-    one_ult_path = "images/one_ult.png"
+    one1_lvl1_path = "images/skills/one1_lvl1.png"
+    one2_lvl1_path = "images/skills/one2_lvl1.png"
+    one1_lvl2_path = "images/skills/one1_lvl2.png"
+    one2_lvl2_path = "images/skills/one2_lvl2.png"
+    one1_lvl3_path = "images/skills/one1_lvl3.png"
+    one2_lvl3_path = "images/skills/one2_lvl3.png"
+    one_ult_path = "images/skills/one_ult.png"
 
     ## images
     # brun
@@ -401,14 +675,6 @@ def setup_cards():
     brun1_lvl3_img = cv2.imread(brun1_lvl3_path)
     brun2_lvl3_img = cv2.imread(brun2_lvl3_path)
     brun_ult_img = cv2.imread(brun_ult_path)
-    # mag
-    mag1_lvl1_img = cv2.imread(mag1_lvl1_path)
-    mag2_lvl1_img = cv2.imread(mag2_lvl1_path)
-    mag1_lvl2_img = cv2.imread(mag1_lvl2_path)
-    mag2_lvl2_img = cv2.imread(mag2_lvl2_path)
-    mag1_lvl3_img = cv2.imread(mag1_lvl3_path)
-    mag2_lvl3_img = cv2.imread(mag2_lvl3_path)
-    mag_ult_img = cv2.imread(mag_ult_path)
     # mat
     mat1_lvl1_img = cv2.imread(mat1_lvl1_path)
     mat2_lvl1_img = cv2.imread(mat2_lvl1_path)
@@ -474,21 +740,6 @@ def setup_cards():
     brun2_lvl3_height = brun2_lvl3_img.shape[0]
     brun_ult_width = brun_ult_img.shape[1]
     brun_ult_height = brun_ult_img.shape[0]
-    # mag
-    mag1_lvl1_width  = mag1_lvl1_img.shape[1]
-    mag1_lvl1_height = mag1_lvl1_img.shape[0]
-    mag2_lvl1_width  = mag2_lvl1_img.shape[1]
-    mag2_lvl1_height = mag2_lvl1_img.shape[0]
-    mag1_lvl2_width  = mag1_lvl2_img.shape[1]
-    mag1_lvl2_height = mag1_lvl2_img.shape[0]
-    mag2_lvl2_width  = mag2_lvl2_img.shape[1]
-    mag2_lvl2_height = mag2_lvl2_img.shape[0]
-    mag1_lvl3_width  = mag1_lvl3_img.shape[1]
-    mag1_lvl3_height = mag1_lvl3_img.shape[0]
-    mag2_lvl3_width  = mag2_lvl3_img.shape[1]
-    mag2_lvl3_height = mag2_lvl3_img.shape[0]
-    mag_ult_width = mag_ult_img.shape[1]
-    mag_ult_height = mag_ult_img.shape[0]
     # mat
     mat1_lvl1_width  = mat1_lvl1_img.shape[1]
     mat1_lvl1_height = mat1_lvl1_img.shape[0]
@@ -589,14 +840,6 @@ def setup_cards():
     brun1_lvl3_color = (0, 128, 255)
     brun2_lvl3_color = (0, 255, 255)
     brun_ult_color = (0, 0, 255)
-    # mag
-    mag1_lvl1_color = (255, 128, 0)  # same as mel
-    mag2_lvl1_color = (255, 255, 0)
-    mag1_lvl2_color = (255, 128, 0)
-    mag2_lvl2_color = (255, 255, 0)
-    mag1_lvl3_color = (255, 128, 0)
-    mag2_lvl3_color = (255, 255, 0)
-    mag_ult_color = (255, 0, 0)
     # mat
     mat1_lvl1_color = (128, 255, 128)  # same as skadi
     mat2_lvl1_color = (255, 255, 255)
@@ -614,7 +857,7 @@ def setup_cards():
     gow2_lvl3_color = (255, 0, 255)
     gow_ult_color = (0, 0, 0)
     # mel
-    mel1_lvl1_color = (255, 128, 0)  # same as mag
+    mel1_lvl1_color = (255, 128, 0)  # same as
     mel2_lvl1_color = (255, 255, 0)
     mel1_lvl2_color = (255, 128, 0)
     mel2_lvl2_color = (255, 255, 0)
@@ -655,14 +898,6 @@ def setup_cards():
     brun1_lvl3_thickness = 10
     brun2_lvl3_thickness = 10
     brun_ult_thickness = 10
-    # mag
-    mag1_lvl1_thickness = 1
-    mag2_lvl1_thickness = 1
-    mag1_lvl2_thickness = 5
-    mag2_lvl2_thickness = 5
-    mag1_lvl3_thickness = 10
-    mag2_lvl3_thickness = 10
-    mag_ult_thickness = 10
     # mat
     mat1_lvl1_thickness = 1
     mat2_lvl1_thickness = 1
@@ -721,14 +956,6 @@ def setup_cards():
     brun1_lvl3_Skill = Skills("brun1", 3, brun1_lvl3_path, brun1_lvl3_img, brun1_lvl3_width, brun1_lvl3_height, brun1_lvl3_color, brun1_lvl3_thickness)
     brun2_lvl3_Skill = Skills("brun2", 3, brun2_lvl3_path, brun2_lvl3_img, brun2_lvl3_width, brun2_lvl3_height, brun2_lvl3_color, brun2_lvl3_thickness)
     brun_ult_Skill = Skills("brun_ult", 3, brun_ult_path, brun_ult_img, brun_ult_width, brun_ult_height, brun_ult_color, brun_ult_thickness)
-    # mag
-    mag1_lvl1_Skill = Skills("mag1", 1, mag1_lvl1_path, mag1_lvl1_img, mag1_lvl1_width, mag1_lvl1_height, mag1_lvl1_color, mag1_lvl1_thickness)
-    mag2_lvl1_Skill = Skills("mag2", 1, mag2_lvl1_path, mag2_lvl1_img, mag2_lvl1_width, mag2_lvl1_height, mag2_lvl1_color, mag2_lvl1_thickness)
-    mag1_lvl2_Skill = Skills("mag1", 2, mag1_lvl2_path, mag1_lvl2_img, mag1_lvl2_width, mag1_lvl2_height, mag1_lvl2_color, mag1_lvl2_thickness)
-    mag2_lvl2_Skill = Skills("mag2", 2, mag2_lvl2_path, mag2_lvl2_img, mag2_lvl2_width, mag2_lvl2_height, mag2_lvl2_color, mag2_lvl2_thickness)
-    mag1_lvl3_Skill = Skills("mag1", 3, mag1_lvl3_path, mag1_lvl3_img, mag1_lvl3_width, mag1_lvl3_height, mag1_lvl3_color, mag1_lvl3_thickness)
-    mag2_lvl3_Skill = Skills("mag2", 3, mag2_lvl3_path, mag2_lvl3_img, mag2_lvl3_width, mag2_lvl3_height, mag2_lvl3_color, mag2_lvl3_thickness)
-    mag_ult_Skill = Skills("mag_ult", 3, mag_ult_path, mag_ult_img, mag_ult_width, mag_ult_height, mag_ult_color, mag_ult_thickness)
     # mat
     mat1_lvl1_Skill = Skills("mat1", 1, mat1_lvl1_path, mat1_lvl1_img, mat1_lvl1_width, mat1_lvl1_height, mat1_lvl1_color, mat1_lvl1_thickness)
     mat2_lvl1_Skill = Skills("mat2", 1, mat2_lvl1_path, mat2_lvl1_img, mat2_lvl1_width, mat2_lvl1_height, mat2_lvl1_color, mat2_lvl1_thickness)
@@ -779,51 +1006,46 @@ def setup_cards():
     one_ult_Skill = Skills("one_ult", 3, one_ult_path, one_ult_img, one_ult_width, one_ult_height, one_ult_color, one_ult_thickness)
 
     for p in Skills:
-        if p.name == "brun1":
-            p.threshold = 0.9
-        elif p.name == "brun2":
-            p.threshold = 0.9
-        elif p.name == "brun_ult":
-            p.threshold = 0.9
-        elif p.name == "mag1":
-            p.threshold = 0.9
-        elif p.name == "mag2":
-            p.threshold = 0.9
-        elif p.name == "mag_ult":
-            p.threshold = 0.9
-        elif p.name == "mat1":
-            p.threshold = 0.85
-        elif p.name == "mat2":
-            p.threshold = 0.8
-        elif p.name == "mat_ult":
-            p.threshold = 0.9
-        elif p.name == "gow1":
-            p.threshold = 0.9
-        elif p.name == "gow2":
-            p.threshold = 0.85
-        elif p.name == "gow_ult":
-            p.threshold = 0.9
-        elif p.name == "mel1":
-            p.threshold = 0.93
-        elif p.name == "mel2":
-            p.threshold = 0.9
-        elif p.name == "mel_ult":
-            p.threshold = 0.9
-        elif p.name == "jor1":
-            p.threshold = 0.93
-        elif p.name == "jor2":
-            p.threshold = 0.9
-        elif p.name == "jor_ult":
-            p.threshold = 0.85
-        elif p.name == "skadi1":
-            p.threshold = 0.93
-        elif p.name == "skadi2":
-            p.threshold = 0.9
-        elif p.name == "skadi_ult":
-            p.threshold = 0.9
-        elif p.name == "one1":
-            p.threshold = 0.9
-        elif p.name == "one2":
-            p.threshold = 0.9
-        elif p.name == "one_ult":
-            p.threshold = 0.9
+        match p.name:
+            case "brun1":
+                p.threshold = 0.9
+            case "brun2":
+                p.threshold = 0.9
+            case "brun_ult":
+                p.threshold = 0.9
+            case "mat1":
+                p.threshold = 0.85
+            case "mat2":
+                p.threshold = 0.8
+            case "mat_ult":
+                p.threshold = 0.9
+            case "gow1":
+                p.threshold = 0.9
+            case "gow2":
+                p.threshold = 0.85
+            case "gow_ult":
+                p.threshold = 0.9
+            case "mel1":
+                p.threshold = 0.93
+            case "mel2":
+                p.threshold = 0.9
+            case "mel_ult":
+                p.threshold = 0.9
+            case "jor1":
+                p.threshold = 0.93
+            case "jor2":
+                p.threshold = 0.9
+            case "jor_ult":
+                p.threshold = 0.85
+            case "skadi1":
+                p.threshold = 0.93
+            case "skadi2":
+                p.threshold = 0.9
+            case "skadi_ult":
+                p.threshold = 0.9
+            case "one1":
+                p.threshold = 0.9
+            case "one2":
+                p.threshold = 0.9
+            case "one_ult":
+                p.threshold = 0.9
